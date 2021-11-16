@@ -1,10 +1,18 @@
 import Link from 'next/link';
 import ReactMakrdown from 'react-markdown';
+import { useDocumentData } from 'react-firebase-hooks/firestore';
+import { db } from '../lib/firebase';
+import { doc, getDoc } from 'firebase/firestore';
 
-const PostContent = ({ post }) => {
+const PostContent = ({ post, path }) => {
   const createdAt = typeof post?.createdAt === 'number' ?
     new Date(post.createdAt)
     : post.createdAt.toDate();
+
+  const postRef = doc(db, path);
+  const [realtimePost] = useDocumentData(postRef);
+
+  const updatedPost = realtimePost || post;
 
   return (
     <div className="card">
@@ -12,12 +20,12 @@ const PostContent = ({ post }) => {
 
       <span className="text-sm">
         Written by {' '}
-        <Link href={`/${post.username}`}>
-          <a className="text-info">@{post.username}</a>
+        <Link href={`/${updatedPost.username}`}>
+          <a className="text-info">@{updatedPost.username}</a>
         </Link>{' '}
         on {createdAt.toISOString()}
       </span>
-      <ReactMakrdown>{post?.content}</ReactMakrdown>
+      <ReactMakrdown>{updatedPost?.content}</ReactMakrdown>
     </div>
   )
 }

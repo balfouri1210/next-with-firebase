@@ -43,10 +43,18 @@ export async function getStaticPaths() {
   }
 }
 
-const Post = (props) => {
+const Post = ({ post, path }) => {
   return (
     <main className={styles.container}>
-      <PostContent post={props.post} />
+      <section>
+        <PostContent post={post} path={path} />
+      </section>
+
+      <aside className="card">
+        <p>
+          <strong>{post.heartCount || 0} ♥️</strong>
+        </p>
+      </aside>
     </main>
   )
 }
