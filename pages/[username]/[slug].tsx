@@ -19,6 +19,9 @@ export async function getStaticProps({ params }) {
     path = postRef.path;
   }
 
+  console.log(post);
+  
+
   return {
     props: {
       post, path

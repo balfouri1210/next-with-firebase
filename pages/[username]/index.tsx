@@ -31,7 +31,7 @@ const UserProfilePage = ({ user, posts }) => {
   return (
     <main>
       <UserProfile user={user} />
-      <PostFeed posts={posts} admin />
+      <PostFeed posts={posts} />
     </main>
   )
 }

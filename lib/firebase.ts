@@ -60,6 +60,7 @@ export function postToJSON(doc) {
     ...data,
     // Gotcha! firestore timestamp NOT serializable to JSON. Must convert to milliseconds
     createdAt: data.createdAt.toMillis(),
+    updatedAt: data.createdAt.toMillis(),
   };
 }
 

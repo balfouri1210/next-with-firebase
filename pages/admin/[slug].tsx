@@ -1,0 +1,92 @@
+import styles from '../../styles/Admin.module.css';
+import AuthCheck from '../../components/AuthCheck';
+import { db, auth } from '../../lib/firebase';
+import { doc, getDoc, serverTimestamp, updateDoc } from 'firebase/firestore';
+
+import { useState } from 'react';
+import { useRouter } from 'next/router';
+
+import { useDocumentData } from 'react-firebase-hooks/firestore';
+import { useForm } from 'react-hook-form';
+import ReactMarkdown from 'react-markdown';
+import Link from 'next/link';
+import toast from 'react-hot-toast';
+
+function PostManager() {
+  const [preview, setPreview] = useState(false);
+
+  const router = useRouter();
+  const { slug } = router.query;
+
+  // doc에 쓰이는 param은 string만 지원하는데,
+  // useRouter의 리턴타입이 string | string[] 이라서 TS에러가 발생했다.
+  // 이럴때 as 키워드로 타입을 캐스팅하여 에러를 피할 수 있다.
+  const postRef = doc(db, 'users', auth.currentUser.uid, 'posts', slug as string);
+  const [post] = useDocumentData(postRef);
+
+  return (
+    <main className={styles.container}>
+      {post && (
+        <>
+          <section>
+            <h1>{post.title}</h1>
+            <p>ID: {post.slug}</p>
+
+            <PostForm
+              postRef={postRef}
+              defaultValues={post}
+              preview={preview} />
+          </section>
+        </>
+      )}
+    </main>
+  )
+}
+
+function PostForm({ defaultValues, postRef, preview }) {
+  const { register, handleSubmit, reset, watch } = useForm({ defaultValues, mode: 'onChange' });
+
+  const updatePost = async ({ content, published }) => {
+    await updateDoc(postRef, {
+      content,
+      published,
+      updatedAt: serverTimestamp()
+    });
+
+    reset({ content, published });
+    toast.success('Post updated successfully!');
+  }
+
+  return (
+    <form onSubmit={handleSubmit(updatePost)}>
+      {preview && (
+        <div className="card">
+          <ReactMarkdown>{watch('coontent')}</ReactMarkdown>
+        </div>
+      )}
+
+      <div className={preview ? styles.hidden : styles.controls}>
+        <textarea {...register('content')} name="content"></textarea>
+
+        <fieldset>
+          <input className={styles.checkbox} name="published" type="checkbox" {...register('published')} />
+          <label>Published</label>
+        </fieldset>
+
+        <button type="submit" className="btn-green">
+          Save Changes
+        </button>
+      </div>
+    </form>
+  )
+}
+
+const AdminPostEdit = () => {
+  return (
+    <AuthCheck>
+      <PostManager></PostManager>
+    </AuthCheck>
+  )
+};
+
+export default AdminPostEdit;
