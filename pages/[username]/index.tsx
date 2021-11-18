@@ -13,6 +13,10 @@ export async function getServerSideProps({ query }) {
   if (userDoc) {
     user = userDoc.data();
     posts = await getPosts(userDoc.id);
+  } else {
+    return {
+      notFound: true
+    }
   }
 
   return {

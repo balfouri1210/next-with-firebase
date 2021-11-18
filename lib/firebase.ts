@@ -33,7 +33,7 @@ const app = firebase.initializeApp(firebaseConfig);
 // const analytics = firebaseAnalytics.getAnalytics(app);
 
 export const googleAuthProvider = new GoogleAuthProvider();
-export const auth = getAuth();
+export const auth = getAuth(); // 현재 로그인한 사용자 return
 export { signInWithPopup, signOut } from 'firebase/auth';
 
 export const db = getFirestore();

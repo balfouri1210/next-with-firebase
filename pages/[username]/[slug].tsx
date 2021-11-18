@@ -3,6 +3,7 @@ import PostContent from '../../components/PostContent';
 import { db, getUserWithUsername, postToJSON } from '../../lib/firebase';
 import { doc, getDoc, getDocs, query, collectionGroup } from 'firebase/firestore';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
+import Metatags from '../../components/Metatags';
 
 export async function getStaticProps({ params }) {
   const { username, slug } = params;
@@ -46,6 +47,8 @@ export async function getStaticPaths() {
 const Post = ({ post, path }) => {
   return (
     <main className={styles.container}>
+      <Metatags />
+
       <section>
         <PostContent post={post} path={path} />
       </section>

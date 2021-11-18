@@ -54,6 +54,7 @@ function UsernameForm() {
     const batch = writeBatch(db);
 
     const usersRef = doc(db, 'users', user.uid);
+    // set 메소드는 document가 없을 경우, 자동으로 생성한다.
     batch.set(usersRef, {
       username: formValue,
       photoURL: user.photoURL,
