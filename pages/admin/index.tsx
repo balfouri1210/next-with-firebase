@@ -68,7 +68,7 @@ const CreateNewPost = () => {
         content: '# hello world!',
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
-        heartCoount: 0
+        heartCount: 0
       };
   
       await setDoc(postRef, data);
