@@ -12,24 +12,17 @@ import {
   limit,
   Timestamp
 } from 'firebase/firestore';
+import firebaseConfig from '../config/env';
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: 'AIzaSyB1KqJ4g5gF4XNI87t-iaYaf_su8pCZxMo',
-  authDomain: 'mute-48b06.firebaseapp.com',
-  projectId: 'mute-48b06',
-  storageBucket: 'mute-48b06.appspot.com',
-  messagingSenderId: '898197776493',
-  appId: '1:898197776493:web:270910e88a09638aef7764',
-  measurementId: 'G-NBHBFBQCDZ'
-};
 
 // Initialize Firebase
-const app = firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig);
 // const analytics = firebaseAnalytics.getAnalytics(app);
 
 export const googleAuthProvider = new GoogleAuthProvider();
@@ -37,6 +30,8 @@ export const auth = getAuth(); // 현재 로그인한 사용자 return
 export { signInWithPopup, signOut } from 'firebase/auth';
 
 export const db = getFirestore();
+
+export const storage = getStorage();
 
 export async function getUserWithUsername(username: string) {
   const usersRef = collection(db, 'users');

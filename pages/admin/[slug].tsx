@@ -1,5 +1,6 @@
 import styles from '../../styles/Admin.module.css';
 import AuthCheck from '../../components/AuthCheck';
+import ImageUploader from '../../components/ImageUploader';
 import { db, auth } from '../../lib/firebase';
 import { doc, getDoc, serverTimestamp, updateDoc } from 'firebase/firestore';
 
@@ -31,6 +32,8 @@ function PostManager() {
           <section>
             <h1>{post.title}</h1>
             <p>ID: {post.slug}</p>
+
+            <ImageUploader />
 
             <PostForm
               postRef={postRef}
